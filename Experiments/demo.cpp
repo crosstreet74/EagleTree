@@ -11,8 +11,8 @@ public:
 vector<Thread*> Example_Workload::generate() {
 
 	// This workload begins with a large sequential write of the entire logical address space.
-	Simple_Thread* init_write = new Synchronous_No_Collision_Random_Writer(min_lba, max_lba, 135);
-	//Simple_Thread* init_write = new Synchronous_Sequential_Writer(min_lba, max_lba);
+	//Simple_Thread* init_write = new Synchronous_No_Collision_Random_Writer(min_lba, max_lba, 135);
+	Simple_Thread* init_write = new Synchronous_Sequential_Writer(min_lba, max_lba);
 	init_write->set_io_size(1);
 	init_write->set_num_ios(NUMBER_OF_ADDRESSABLE_PAGES() * OVER_PROVISIONING_FACTOR);
 	vector<Thread*> starting_threads;
@@ -48,8 +48,8 @@ int main()
 {
 	printf("Running EagleTree\n");
 	set_small_SSD_config();
-	FTL_DESIGN = 1;	// using DFTL
-	SCHEDULING_SCHEME = 7;
+	FTL_DESIGN = 2;	// using DFTL
+	SCHEDULING_SCHEME = 0;
 	PRINT_LEVEL = 0;
 	MAX_SSD_QUEUE_SIZE = 16;
 	ftl_cache::CACHED_ENTRIES_THRESHOLD = pow(2,15);		// SRAM fitting 256 kb, or 2^25 entries,
