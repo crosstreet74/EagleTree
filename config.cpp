@@ -253,7 +253,7 @@ void load_entry(char *name, double value, uint line_number) {
 }
 
 void set_small_SSD_config() {
-	SSD_SIZE = 4;
+	SSD_SIZE = 2;
 	PACKAGE_SIZE = 2;
 	DIE_SIZE = 1;
 	PLANE_SIZE = 1024;
