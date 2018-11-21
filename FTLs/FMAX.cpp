@@ -107,7 +107,7 @@ void FMAX::write(Event *event)
 
 	// Choose new address. Get one from block manager
 	if (addr.valid == NONE) {
-		Address new_addr = bm->find_free_unused_block(event->get_current_time());
+		Address new_addr = bm->find_free_unused_block(1, event->get_current_time());
 		assert(new_addr.valid >= BLOCK);
 		new_addr.valid = PAGE;
 		event->set_address(new_addr);
@@ -165,7 +165,7 @@ void FMAX::write_in_log_block(Event* event) {
 	}
 	// While we have not exceeded the allotted number of log blocks, just get a new log block for the write
 	else if (num_active_log_blocks < NUM_LOG_BLOCKS) {
-		Address new_addr = bm->find_free_unused_block(event->get_current_time());
+		Address new_addr = bm->find_free_unused_block(2, event->get_current_time());
 		if (new_addr.valid == NONE) {
 			choose_existing_log_block(event);
 		}
