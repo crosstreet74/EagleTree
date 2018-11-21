@@ -48,8 +48,8 @@ int main()
 {
 	printf("Running EagleTree\n");
 	set_small_SSD_config();
-	FTL_DESIGN = 2;	// using DFTL
-	SCHEDULING_SCHEME = 0;
+	FTL_DESIGN = 1;	// using DFTL
+	SCHEDULING_SCHEME = 7;
 	PRINT_LEVEL = 0;
 	MAX_SSD_QUEUE_SIZE = 16;
 	ftl_cache::CACHED_ENTRIES_THRESHOLD = pow(2,15);		// SRAM fitting 256 kb, or 2^25 entries,

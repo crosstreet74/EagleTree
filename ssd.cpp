@@ -38,7 +38,7 @@ Ssd::Ssd():
 		case 0: ftl = new FtlImpl_Page(this, bm); break;
 		case 1: ftl = new DFTL(this, bm); break;
 		case 2: ftl = new FAST(this, bm, migrator); break;
-		case 3: ftl = new FMAX(this, bm, migrator); break;
+		case 2: ftl = new FMAX(this, bm, migrator); break;
 		default: ftl = new FtlImpl_Page(this, bm); break;
 		}
 	}
