@@ -284,7 +284,6 @@ class FtlParent;
 class FtlImpl_Page;
 class DFTL;
 class FAST;
-class FMAX;
 class Ssd;
 
 class event_queue;
@@ -998,83 +997,6 @@ public:
 	FAST(Ssd *ssd, Block_manager_parent* bm, Migrator* migrator);
 	FAST();
 	~FAST();
-	void read(Event *event);
-	void write(Event *event);
-	void trim(Event *event);
-	void register_write_completion(Event const& event, enum status result);
-	void register_read_completion(Event const& event, enum status result);
-	void register_trim_completion(Event & event);
-	long get_logical_address(uint physical_address) const;
-	Address get_physical_address(uint logical_address) const;
-	void set_replace_address(Event& event) const;
-	void set_read_address(Event& event) const;
-	void register_erase_completion(Event & event);
-	void print() const;
-    friend class boost::serialization::access;
-    template<class Archive> void
-    serialize(Archive & ar, const unsigned int version) {
-    	ar & boost::serialization::base_object<FtlParent>(*this);
-    	ar & translation_table;
-    	ar & active_log_blocks_map;
-    	ar & dial;
-    	ar & NUM_LOG_BLOCKS;
-    	ar & num_active_log_blocks;
-    	ar & bm;
-    	//ar & queued_events;
-    	ar & migrator;
-    	ar & page_mapping;
-    	//ar & gc_queue;
-    }
-private:
-	void schedule(Event* e);
-	void choose_existing_log_block(Event* e);
-	void unlock_block(Event const& event);
-	void consider_doing_garbage_collection(double time);
-
-	struct log_block {
-		log_block(Address& addr) : addr(addr), num_blocks_mapped_inside() {}
-		log_block() : addr(), num_blocks_mapped_inside() {}
-		Address addr;
-		set<int> num_blocks_mapped_inside;
-	    friend class boost::serialization::access;
-	    template<class Archive> void
-	    serialize(Archive & ar, const unsigned int version) {
-	    	ar & addr;
-	    	ar & num_blocks_mapped_inside;
-	    }
-	};
-
-	struct mycomparison
-	{
-	  bool operator() (const log_block* lhs, const log_block* rhs) const
-	  {
-	    return lhs->num_blocks_mapped_inside.size() > rhs->num_blocks_mapped_inside.size();
-	  }
-	};
-
-	void write_in_log_block(Event* event);
-	void queue_up(Event* e, Address const& lock);
-	priority_queue<log_block*, std::vector<log_block*>, mycomparison> full_log_blocks;
-	void release_events_there_was_no_space_for();
-	void garbage_collect(int block_id, log_block* log_block, double time);
-
-	vector<Address> translation_table;		  // maps block ID to a block address in flash. This is the main mapping table
-	map<int, log_block*> active_log_blocks_map;  // Maps a block ID to the address of the corresponding log block. Used to quickly determine where to place an update
-	int dial;
-	int NUM_LOG_BLOCKS;
-	int num_active_log_blocks;
-	map<int, queue<Event*> > queued_events; // stores events tar
-	Migrator* migrator;
-	FtlImpl_Page page_mapping;
-	map<int, queue<Event*> > gc_queue;
-	map<long, queue<Event*> > logical_dependencies;  // a locking table with page granularity
-};
-
-class FMAX : public FtlParent {
-public:
-	FMAX(Ssd *ssd, Block_manager_parent* bm, Migrator* migrator);
-	FMAX();
-	~FMAX();
 	void read(Event *event);
 	void write(Event *event);
 	void trim(Event *event);

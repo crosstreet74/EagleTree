@@ -397,7 +397,7 @@ void IOScheduler::handle_write(Event* event) {
 	else if (!bm->can_schedule_on_die(addr, event->get_event_type(), event->get_application_io_id())) {
 		event->incr_bus_wait_time(wait_time + BUS_DATA_DELAY + BUS_CTRL_DELAY);
 		push(event);
-		assert(true);
+		assert(false);
 	}
 	else if (wait_time > 0) {
 		event->incr_bus_wait_time(wait_time);
